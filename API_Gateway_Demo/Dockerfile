@@ -28,6 +28,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-COPY ["API_Gateway_Demo/ocelot.json", "./ocelot.json"]
+COPY ["API_Gateway_Demo/ocelot.json", "ocelot.json"]
 
 ENTRYPOINT ["dotnet", "API_Gateway_Demo.dll"]

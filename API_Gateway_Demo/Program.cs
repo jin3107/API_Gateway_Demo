@@ -16,15 +16,11 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerForOcelotUI(opt =>
 {
-    app.UseSwagger();
-    //app.UseSwaggerUI();
-    app.UseSwaggerForOcelotUI(opt =>
-    {
-        opt.PathToSwaggerGenerator = "/swagger/docs";
-    });
-}
+    opt.PathToSwaggerGenerator = "/swagger/docs";
+});
 
 app.UseHttpsRedirection();
 
