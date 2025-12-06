@@ -1,14 +1,4 @@
 services:
-  mysql:
-    image: mysql:8
-    container_name: mysql-container
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
   ocelot:
     build:
       context: .
@@ -17,10 +7,5 @@ services:
     container_name: ocelot-gateway
     ports:
       - "5222:8080"
-    depends_on:
-      - mysql
     extra_hosts:
       host.docker.internal: host-gateway
-
-volumes:
-  mysql_data:
