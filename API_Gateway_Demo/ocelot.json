@@ -5,8 +5,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 5104
+          "Host": "category-service",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/categories/{everything}",
@@ -18,8 +18,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 5110
+          "Host": "product-service",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/products/{everything}",
@@ -37,7 +37,7 @@
         {
           "Name": "CategoryService v1",
           "Version": "v1",
-          "Url": "http://host.docker.internal:5104/swagger/v1/swagger.json"
+          "Url": "http://category-service:8080/swagger/v1/swagger.json"
         }
       ]
     },
@@ -47,7 +47,7 @@
         {
           "Name": "ProductService v1",
           "Version": "v1",
-          "Url": "http://host.docker.internal:5110/swagger/v1/swagger.json"
+          "Url": "http://product-service:8080/swagger/v1/swagger.json"
         }
       ]
     }

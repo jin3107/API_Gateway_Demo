@@ -1,11 +1,47 @@
 services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports: 
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   ocelot:
     build:
       context: .
       dockerfile: API_Gateway_Demo/Dockerfile
-      
     container_name: ocelot-gateway
     ports:
       - "5222:8080"
     extra_hosts:
       host.docker.internal: host-gateway
+
+  categoryservice:
+    build: 
+      context: .
+      dockerfile: CategoryService/Dockerfile
+    container_name: category-service
+    ports:
+      - "5223:8080"
+    depends_on:
+      - mysql
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=categoryservice;User=root;Password=123456;
+
+  productservice:
+    build: 
+      context: .
+      dockerfile: ProductService/Dockerfile
+    container_name: product-service
+    ports:
+      - "5224:8080"
+    depends_on:
+      - mysql
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=productservice;User=root;Password=123456;
+
+volumes:
+  mysql_data:
