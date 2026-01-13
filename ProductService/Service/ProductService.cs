@@ -7,10 +7,12 @@ namespace ProductService.Service
     public class ProductService : IProductService
     {
         private readonly IProductRepository<Product> _productRepository;
+        private readonly ICategoryHttpService _categoryHttpService;
 
-        public ProductService(IProductRepository<Product> productRepository)
+        public ProductService(IProductRepository<Product> productRepository, ICategoryHttpService categoryHttpService)
         {
             _productRepository = productRepository;
+            _categoryHttpService = categoryHttpService;
         }
 
         public async Task<List<ProductResponse>> GetAllAsync()
@@ -18,7 +20,16 @@ namespace ProductService.Service
             try
             {
                 var products = await _productRepository.GetAllAsync();
-                return products.Select(ProductMapper.ToResponse).ToList();
+                var responses = new List<ProductResponse>();
+
+                foreach (var product in products)
+                {
+                    var response = ProductMapper.ToResponse(product);
+                    response.CategoryName = await _categoryHttpService.GetCategoryNameByIdAsync(product.CategoryId);
+                    responses.Add(response);
+                }
+
+                return responses;
             }
             catch (Exception ex)
             {
@@ -34,7 +45,11 @@ namespace ProductService.Service
                 if (product == null)
                     throw new Exception($"Product với id {id} không tồn tại");
 
-                return ProductMapper.ToResponse(product);
+                var response = ProductMapper.ToResponse(product);
+                response.CategoryName = await _categoryHttpService.GetCategoryNameByIdAsync(product.CategoryId);
+
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -48,8 +63,15 @@ namespace ProductService.Service
             {
                 var products = await _productRepository.GetAllAsync();
                 var categoryProducts = products.Where(p => p.CategoryId == categoryId).ToList();
+                var ressponses = new List<ProductResponse>();
+                foreach (var product in categoryProducts)
+                {
+                    var response = ProductMapper.ToResponse(product);
+                    response.CategoryName = await _categoryHttpService.GetCategoryNameByIdAsync(product.CategoryId);
+                    ressponses.Add(response);
+                }
 
-                return categoryProducts.Select(ProductMapper.ToResponse).ToList();
+                return ressponses;
             }
             catch (Exception ex)
             {

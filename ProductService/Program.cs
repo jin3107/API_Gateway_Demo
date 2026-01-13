@@ -18,8 +18,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register Generic Repository
 builder.Services.AddScoped(typeof(IProductRepository<>), typeof(ProductRepository<>));
 
-// Register CategoryService
+// Register ProductService
 builder.Services.AddScoped<IProductService, ProductService.Service.ProductService>();
+
+// Register HttpClient for CategoryService communication
+builder.Services.AddHttpClient<ICategoryHttpService, CategoryHttpService>(client =>
+{
+    var categoryServiceUrl = builder.Configuration["CategoryServiceUrl"] ?? "http://categoryservice:8080";
+    client.BaseAddress = new Uri(categoryServiceUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

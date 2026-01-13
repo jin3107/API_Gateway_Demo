@@ -8,6 +8,8 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - microservices-network
 
   ocelot:
     build:
@@ -18,6 +20,11 @@ services:
       - "5222:8080"
     extra_hosts:
       host.docker.internal: host-gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+    networks:
+      - microservices-network
 
   categoryservice:
     build: 
@@ -30,6 +37,9 @@ services:
       - mysql
     environment:
       - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=categoryservice;User=root;Password=123456;
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+    networks:
+      - microservices-network
 
   productservice:
     build: 
@@ -42,6 +52,14 @@ services:
       - mysql
     environment:
       - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=productservice;User=root;Password=123456;
+      - CategoryServiceUrl=http://categoryservice:8080
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+    networks:
+      - microservices-network
 
 volumes:
   mysql_data:
+
+networks:
+  microservices-network:
+    driver: bridge

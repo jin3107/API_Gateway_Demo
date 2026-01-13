@@ -37,7 +37,7 @@
         {
           "Name": "CategoryService v1",
           "Version": "v1",
-          "Url": "http://category-service:8080/swagger/v1/swagger.json"
+          "Url": "http://categoryservice:8080/swagger/v1/swagger.json"
         }
       ]
     },
@@ -47,7 +47,7 @@
         {
           "Name": "ProductService v1",
           "Version": "v1",
-          "Url": "http://product-service:8080/swagger/v1/swagger.json"
+          "Url": "http://productservice:8080/swagger/v1/swagger.json"
         }
       ]
     }
